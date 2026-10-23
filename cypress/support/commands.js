@@ -23,7 +23,12 @@ Cypress.Commands.add("getNavLink", (label) => {
  * Click a top-level nav link and wait for the URL to change accordingly.
  */
 Cypress.Commands.add("clickNavLink", (label) => {
-  cy.getNavLink(label).scrollIntoView().click({ force: true });
+  // Split across two chains (rather than
+  // `.scrollIntoView().click()` on one line): chaining two action
+  // commands together is flagged as unsafe by cypress/unsafe-to-chain-command
+  // since Cypress doesn't re-verify the subject between them.
+  cy.getNavLink(label).scrollIntoView();
+  cy.getNavLink(label).click({ force: true });
 });
 
 /**
@@ -35,10 +40,9 @@ Cypress.Commands.add("clickNavLink", (label) => {
  * `:hover`, which a synthetic mouseover event does not trigger.
  */
 Cypress.Commands.add("openSubMenu", (parentLabel, childLabel) => {
-  cy.getNavLink(parentLabel).scrollIntoView().realHover();
-  cy.contains("a", childLabel, { timeout: 10000 })
-    .should("be.visible")
-    .click({ force: true });
+  cy.getNavLink(parentLabel).scrollIntoView();
+  cy.getNavLink(parentLabel).realHover();
+  cy.contains("a", childLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
 });
 
 /**

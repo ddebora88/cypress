@@ -17,7 +17,8 @@ describe("SawitPRO Main Navigation Menu", () => {
       // nav is always in a known state before clicking the next item.
       cy.wrap(this.menuData).each((item) => {
         cy.visit("/");
-        NavigationMenu.nav.contains("a", item.label).scrollIntoView().click({ force: true });
+        NavigationMenu.nav.contains("a", item.label).scrollIntoView();
+        NavigationMenu.nav.contains("a", item.label).click({ force: true });
         cy.url().should("include", item.path);
         cy.title().should("eq", item.expectedTitle);
       });
@@ -29,7 +30,8 @@ describe("SawitPRO Main Navigation Menu", () => {
       // The dropdown opens via CSS `:hover`, so a real hover is required
       // (see cypress-real-events import in support/e2e.js) — a synthetic
       // `.trigger("mouseover")` does not change the browser's hover state.
-      NavigationMenu.produkLink().scrollIntoView().realHover();
+      NavigationMenu.produkLink().scrollIntoView();
+      NavigationMenu.produkLink().realHover();
       cy.contains("a", "PetaniPRO").should("be.visible");
     });
 

@@ -2,6 +2,7 @@
   "name": "sawitpro-web-automation",
   "version": "1.0.0",
   "description": "Sample Cypress web automation project for https://www.sawitpro.id/ - covers main menu navigation, homepage, and key product/info pages.",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "cypress:open": "cypress open",
@@ -15,13 +16,22 @@
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
     "allure:report": "npm run allure:generate && npm run allure:open",
-    "test:report": "npm run allure:clean && npm run cypress:run; npm run allure:report"
+    "test:report": "npm run allure:clean && npm run cypress:run; npm run allure:report",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "allure-commandline": "^2.30.0",
     "allure-cypress": "^3.0.0",
     "cypress": "^13.15.0",
     "cypress-real-events": "^1.13.0",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-cypress": "^7.0.2",
+    "prettier": "^3.9.10",
     "rimraf": "^5.0.5"
   },
   "keywords": [
@@ -29,5 +39,8 @@
     "e2e",
     "automation",
     "sawitpro"
-  ]
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

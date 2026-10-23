@@ -1,20 +1,39 @@
 # SawitPRO Web Automation (Cypress Sample Project)
 
-Sample end-to-end test automation suite for [sawitpro.id](https://www.sawitpro.id/), built with [Cypress](https://www.cypress.io/). It demonstrates how to automate the site's main navigation menu, including dropdown submenus, using a Page Object Model structure.
+[![E2E Tests](https://github.com/ddebora88/cypress/actions/workflows/e2e-tests.yml/badge.svg)](https://github.com/ddebora88/cypress/actions/workflows/e2e-tests.yml)
+[![Allure Report](https://img.shields.io/badge/Allure%20Report-view-blue)](https://ddebora88.github.io/cypress/)
+[![License: MIT](https://img.shields.io/github/license/ddebora88/cypress)](LICENSE)
+[![Cypress](https://img.shields.io/badge/tested%20with-Cypress-04C38E?logo=cypress&logoColor=white)](https://www.cypress.io/)
+
+Sample end-to-end test automation suite for [sawitpro.id](https://www.sawitpro.id/), built with [Cypress](https://www.cypress.io/). It demonstrates how to automate a real production site's main navigation menu — including CSS-`:hover`-only dropdowns — using a Page Object Model structure, data-driven tests, a CI pipeline, and an Allure report published on every run.
+
+**[→ View the latest Allure report](https://ddebora88.github.io/cypress/)** (updated automatically by CI on every push to `main`)
+
+## Skills demonstrated
+
+- **Page Object Model** — all locators live in `cypress/support/pageObjects/`, specs stay declarative
+- **Data-driven testing** — the full top-level menu is verified from one fixture (`cypress/fixtures/menu-data.json`), not hardcoded per test
+- **Debugging a real flaky-test cause** — diagnosed that `cy.trigger("mouseover")` doesn't satisfy CSS `:hover` (it only dispatches an event, it doesn't change the browser's real hover state), and fixed it with genuine mouse-move simulation (`cypress-real-events`) instead of papering over it with `{ force: true }`
+- **Custom commands** — reusable nav interactions (`cy.clickNavLink`, `cy.openSubMenu`, `cy.visitAndCheckTitle`) shared across specs
+- **CI/CD** — GitHub Actions runs lint + the full suite on every push/PR, uploads screenshots on failure, and auto-publishes the Allure report to GitHub Pages
+- **Test reporting** — Allure integration (`allure-cypress`) for a stakeholder-readable pass/fail report with steps and failure screenshots, not just terminal output
+- **Code quality tooling** — ESLint (`eslint-plugin-cypress`) + Prettier, enforced in CI
 
 ## What's covered
 
-| Area | Spec file | What it tests |
-|---|---|---|
-| Homepage | `cypress/e2e/homepage/homepage.cy.js` | Page load, title, nav visibility, hero CTA, footer links, social links |
+| Area                    | Spec file                                | What it tests                                                                                                                          |
+| ----------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Homepage                | `cypress/e2e/homepage/homepage.cy.js`    | Page load, title, nav visibility, hero CTA, footer links, social links                                                                 |
 | Main menu (data-driven) | `cypress/e2e/navigation/main-menu.cy.js` | Every top-level menu item (Tentang, Produk, Program, Karir, Promo, Berita, Harga Sawit), plus the Produk and Program dropdown submenus |
-| Produk page | `cypress/e2e/pages/produk.cy.js` | Product cards, submenu navigation into PetaniPRO / KebunPRO |
-| Karir page | `cypress/e2e/pages/karir.cy.js` | Page content and menu reachability |
-| Harga Sawit page | `cypress/e2e/pages/harga-tbs.cy.js` | Page content and menu reachability |
+| Produk page             | `cypress/e2e/pages/produk.cy.js`         | Product cards, submenu navigation into PetaniPRO / KebunPRO                                                                            |
+| Karir page              | `cypress/e2e/pages/karir.cy.js`          | Page content and menu reachability                                                                                                     |
+| Harga Sawit page        | `cypress/e2e/pages/harga-tbs.cy.js`      | Page content and menu reachability                                                                                                     |
 
 ## Project structure
 
 ```
+.github/workflows/
+└── e2e-tests.yml          # CI: lint + Cypress run + Allure publish to GitHub Pages
 cypress/
 ├── e2e/
 │   ├── homepage/
@@ -34,6 +53,8 @@ cypress/
         ├── HomePage.js
         └── NavigationMenu.js  # all nav/menu locators live here
 cypress.config.js
+eslint.config.js
+.prettierrc.json
 package.json
 ```
 
@@ -66,9 +87,34 @@ npm run test:menu       # only the main navigation menu spec
 npm run test:homepage   # only the homepage spec
 ```
 
+## Code quality
+
+```bash
+npm run lint           # ESLint (base rules + eslint-plugin-cypress)
+npm run lint:fix        # ESLint, auto-fixing what it can
+npm run format          # Prettier, writes changes
+npm run format:check    # Prettier, check only (what CI runs)
+```
+
+Both run in CI on every push/PR (see `.github/workflows/e2e-tests.yml`).
+
+## CI/CD
+
+Every push and pull request to `main` triggers `.github/workflows/e2e-tests.yml`, which:
+
+1. **Lints** the project (ESLint + Prettier check)
+2. **Runs the full Cypress suite** headlessly (via [`cypress-io/github-action`](https://github.com/cypress-io/github-action))
+3. **Generates the Allure report** from the run's results
+4. **Uploads** the Allure report and, on failure, Cypress screenshots as workflow artifacts (kept 30 days)
+5. **Publishes the Allure report to GitHub Pages** (from `main` only) — see the badge/link at the top of this README
+
+You can also trigger a run manually from the **Actions** tab (`workflow_dispatch`).
+
+> **First-time setup note:** GitHub Pages needs to be enabled once in this repo's **Settings → Pages**, with the source set to the `gh-pages` branch (root) that this workflow creates on its first successful run on `main`.
+
 ## Allure Test Report
 
-Test runs are recorded by [`allure-cypress`](https://allurereport.org/docs/cypress/) and rendered into a browsable HTML report (pass/fail per test, steps, screenshots on failure, history/trends across runs).
+Test runs are recorded by [`allure-cypress`](https://allurereport.org/docs/cypress/) and rendered into a browsable HTML report (pass/fail per test, steps, screenshots on failure, history/trends across runs). CI publishes this automatically (see above); to generate it locally:
 
 **Prerequisite:** generating/opening the report needs a **Java Runtime (JRE 8+)** on your machine — that's what the Allure commandline tool runs on. `npm install` alone doesn't need Java, only the two `allure:*` steps below.
 
@@ -104,9 +150,10 @@ Cleans old results, runs every spec, then generates and opens the report — eve
 - `Cypress.on("uncaught:exception")` is set to not fail tests on third-party script errors (ads, chat widgets, analytics) that are unrelated to what's under test.
 - The "Produk" and "Program" header menus open via pure CSS `:hover`. Cypress's synthetic `.trigger("mouseover")` does **not** change the browser's real hover state that CSS `:hover` relies on, so it won't visually open these dropdowns. This project uses [`cypress-real-events`](https://github.com/dmtrKovalenko/cypress-real-events)'s `.realHover()` instead (see `NavigationMenu.js` / `commands.js`), which performs a genuine OS-level mouse move.
 - `npm run test:report` chains commands with `;` so the report still generates after a run with failing tests; that syntax needs a POSIX shell (macOS/Linux/Git Bash/WSL). On plain Windows `cmd`/PowerShell, run the steps separately instead: `npm run cypress:run` then `npm run allure:report`.
+- `cypress/unsafe-to-chain-command` (an ESLint rule from `eslint-plugin-cypress`) flags chaining two Cypress _action_ commands together, e.g. `.scrollIntoView().click()`, because Cypress doesn't re-verify the subject between them. This project splits those into two statements instead (re-querying the cheap, static nav link) — see `NavigationMenu.js` / `commands.js` for the pattern.
 
 ## Extending this project
 
 - **New page tests:** add a `*.cy.js` file under `cypress/e2e/pages/`.
 - **New menu item:** add an entry to `cypress/fixtures/menu-data.json` and, if it's a dropdown, add an `openXSubmenu()` method to `NavigationMenu.js`.
-- **CI:** this project is ready to run in any CI environment with Node.js — e.g. `npm ci && npm run cypress:run`.
+- **CI:** already wired up (see [CI/CD](#cicd) above) — `.github/workflows/e2e-tests.yml` runs on every push/PR with no extra setup beyond enabling GitHub Pages once.

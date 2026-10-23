@@ -13,7 +13,7 @@ describe("Karir (Jobs) Page", () => {
 
   it("is reachable from the homepage via the main menu", () => {
     cy.visit("/");
-    cy.get("header, nav").first().contains("a", "Karir").scrollIntoView().click({ force: true });
+    cy.clickNavLink("Karir");
     cy.url().should("include", "/jobs");
     cy.title().should("eq", "Karir | SawitPRO");
   });

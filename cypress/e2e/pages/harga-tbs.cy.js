@@ -9,7 +9,7 @@ describe("Harga Sawit (Harga TBS) Page", () => {
 
   it("is reachable from the homepage via the main menu", () => {
     cy.visit("/");
-    cy.get("header, nav").first().contains("a", "Harga Sawit").scrollIntoView().click({ force: true });
+    cy.clickNavLink("Harga Sawit");
     cy.url().should("include", "/harga-tbs");
   });
 

@@ -21,7 +21,8 @@ describe("SawitPRO Homepage", () => {
   });
 
   it('navigates to the "Tentang" page via the hero CTA button', () => {
-    HomePage.heroAboutButton().first().scrollIntoView().click({ force: true });
+    HomePage.heroAboutButton().first().scrollIntoView();
+    HomePage.heroAboutButton().first().click({ force: true });
     cy.url().should("include", "/tentang");
   });
 

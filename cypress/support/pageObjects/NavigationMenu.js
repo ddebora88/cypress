@@ -43,25 +43,37 @@ class NavigationMenu {
   }
 
   // --- Actions ---------------------------------------------------------------
+  //
+  // Each click/hover is split into two chains (locate+scroll, then
+  // locate+act) rather than `.scrollIntoView().click()` on one line.
+  // Chaining two action commands together is flagged as unsafe by
+  // cypress/unsafe-to-chain-command, since Cypress doesn't re-verify the
+  // subject between them — re-querying the (cheap, static) nav link is
+  // more robust.
 
   clickTentang() {
-    this.tentangLink().scrollIntoView().click({ force: true });
+    this.tentangLink().scrollIntoView();
+    this.tentangLink().click({ force: true });
   }
 
   clickKarir() {
-    this.karirLink().scrollIntoView().click({ force: true });
+    this.karirLink().scrollIntoView();
+    this.karirLink().click({ force: true });
   }
 
   clickPromo() {
-    this.promoLink().scrollIntoView().click({ force: true });
+    this.promoLink().scrollIntoView();
+    this.promoLink().click({ force: true });
   }
 
   clickBerita() {
-    this.beritaLink().scrollIntoView().click({ force: true });
+    this.beritaLink().scrollIntoView();
+    this.beritaLink().click({ force: true });
   }
 
   clickHargaSawit() {
-    this.hargaSawitLink().scrollIntoView().click({ force: true });
+    this.hargaSawitLink().scrollIntoView();
+    this.hargaSawitLink().click({ force: true });
   }
 
   /**
@@ -74,7 +86,8 @@ class NavigationMenu {
    * mouseover event and does not change the browser's actual hover state.
    */
   openProdukSubmenu(itemLabel) {
-    this.produkLink().scrollIntoView().realHover();
+    this.produkLink().scrollIntoView();
+    this.produkLink().realHover();
     cy.contains("a", itemLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
   }
 
@@ -83,7 +96,8 @@ class NavigationMenu {
    * e.g. openProgramSubmenu("Panen Emas")
    */
   openProgramSubmenu(itemLabel) {
-    this.programLink().scrollIntoView().realHover();
+    this.programLink().scrollIntoView();
+    this.programLink().realHover();
     cy.contains("a", itemLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
   }
 }
