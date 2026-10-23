@@ -32,7 +32,19 @@ describe("SawitPRO Main Navigation Menu", () => {
       // `.trigger("mouseover")` does not change the browser's hover state.
       NavigationMenu.produkLink().scrollIntoView();
       NavigationMenu.produkLink().realHover();
-      cy.contains("a", "PetaniPRO").should("be.visible");
+      // Asserted against the parent <ul>'s computed `display` (a plain
+      // string) rather than `.should("be.visible")` on the jQuery-wrapped
+      // <a> directly: when a `.should("be.visible")` assertion on a DOM/
+      // jQuery subject fails, allure-cypress tries to JSON.stringify that
+      // subject for the failure report with no depth/length limit, which
+      // crashes with "RangeError: Invalid string length" on a page this
+      // rich in DOM content — masking the real assertion failure entirely.
+      // Comparing a string keeps any real failure here readable instead.
+      cy.contains("a", "PetaniPRO", { timeout: 10000 })
+        .parent("ul")
+        .should(($ul) => {
+          expect($ul.css("display"), "Produk dropdown <ul> display").not.to.eq("none");
+        });
     });
 
     it("navigates to the PetaniPRO product page", () => {
