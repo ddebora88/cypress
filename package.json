@@ -5,11 +5,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "cypress:open": "cypress open",
+    "cypress:open": "cypress open --browser chrome",
     "cypress:run": "cypress run --browser chrome",
     "test": "cypress run --browser chrome",
     "test:headed": "cypress run --browser chrome --headed",
-    "test:electron": "cypress run",
     "test:menu": "cypress run --browser chrome --spec cypress/e2e/navigation/main-menu.cy.js",
     "test:homepage": "cypress run --browser chrome --spec cypress/e2e/homepage/homepage.cy.js",
     "allure:clean": "rimraf allure-results allure-report",

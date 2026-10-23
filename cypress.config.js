@@ -31,6 +31,25 @@ module.exports = defineConfig({
           enabled: false,
         },
       });
+
+      // Hard-block Electron (Cypress's bundled default browser): the
+      // Produk/Program dropdowns open via CSS `:hover`, and
+      // cypress-real-events' realHover() doesn't reliably render that
+      // `:hover` state in Electron when run headless (it does in Chrome,
+      // which has fuller CDP `Input` domain support — see README > Notes).
+      // This throws early with a clear message instead of letting someone
+      // run `cypress open`/`cypress run` without `--browser chrome` and
+      // hit confusing dropdown-test failures.
+      on("before:browser:launch", (browser) => {
+        if (browser.family !== "chromium" || browser.name === "electron") {
+          throw new Error(
+            `This suite requires Chrome (got "${browser.name}"). Run with --browser chrome, ` +
+              `e.g. "npx cypress run --browser chrome" or "npx cypress open --browser chrome" ` +
+              `(the npm scripts in package.json already do this).`
+          );
+        }
+      });
+
       return config;
     },
   },
