@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress");
+const { allureCypress } = require("allure-cypress/reporter");
 
 module.exports = defineConfig({
   e2e: {
@@ -14,7 +15,12 @@ module.exports = defineConfig({
     video: true,
     screenshotOnRunFailure: true,
     setupNodeEvents(on, config) {
-      // implement node event listeners here if needed
+      // Writes raw Allure result files (json/attachments) to allure-results/
+      // as tests run. Turn those into the viewable HTML report with
+      // `npm run allure:report` (see README > Allure Test Report).
+      allureCypress(on, config, {
+        resultsDir: "allure-results",
+      });
       return config;
     },
   },

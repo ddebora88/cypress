@@ -12,6 +12,11 @@ import "./commands";
 // does trigger `:hover` correctly (see NavigationMenu.js / commands.js).
 import "cypress-real-events/support";
 
+// Reports each test's result (pass/fail/skip), steps, and failure
+// screenshots to allure-results/ for the Allure report (see package.json
+// scripts: allure:generate / allure:open / test:report).
+import "allure-cypress";
+
 // SawitPRO's site may load third-party scripts (ads, chat widgets, analytics)
 // that sometimes throw uncaught exceptions unrelated to the app under test.
 // We don't want those to fail our navigation/menu tests.
