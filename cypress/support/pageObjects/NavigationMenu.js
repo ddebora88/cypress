@@ -67,9 +67,14 @@ class NavigationMenu {
   /**
    * Open the "Produk" dropdown and click one of its submenu items,
    * e.g. openProdukSubmenu("PetaniPRO")
+   *
+   * The dropdown is shown/hidden via pure CSS `:hover`, so it must be
+   * opened with a real hover (cypress-real-events' `.realHover()`), not
+   * Cypress's synthetic `.trigger("mouseover")` — that only dispatches a
+   * mouseover event and does not change the browser's actual hover state.
    */
   openProdukSubmenu(itemLabel) {
-    this.produkLink().scrollIntoView().trigger("mouseover", { force: true });
+    this.produkLink().scrollIntoView().realHover();
     cy.contains("a", itemLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
   }
 
@@ -78,7 +83,7 @@ class NavigationMenu {
    * e.g. openProgramSubmenu("Panen Emas")
    */
   openProgramSubmenu(itemLabel) {
-    this.programLink().scrollIntoView().trigger("mouseover", { force: true });
+    this.programLink().scrollIntoView().realHover();
     cy.contains("a", itemLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
   }
 }

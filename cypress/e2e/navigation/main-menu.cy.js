@@ -26,7 +26,10 @@ describe("SawitPRO Main Navigation Menu", () => {
 
   context("Produk dropdown submenu", () => {
     it("opens the Produk dropdown and shows PetaniPRO as an option", () => {
-      NavigationMenu.produkLink().scrollIntoView().trigger("mouseover", { force: true });
+      // The dropdown opens via CSS `:hover`, so a real hover is required
+      // (see cypress-real-events import in support/e2e.js) — a synthetic
+      // `.trigger("mouseover")` does not change the browser's hover state.
+      NavigationMenu.produkLink().scrollIntoView().realHover();
       cy.contains("a", "PetaniPRO").should("be.visible");
     });
 

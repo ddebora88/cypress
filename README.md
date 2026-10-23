@@ -72,6 +72,7 @@ npm run test:homepage   # only the homepage spec
 - The site is public and may change its DOM/markup over time (menu labels, copy, product cards). If a selector breaks, the `NavigationMenu` and `HomePage` page objects in `cypress/support/pageObjects/` are the single place to update it.
 - Menu items, paths, and expected page titles used by the data-driven test live in `cypress/fixtures/menu-data.json` — add a new object there to extend coverage to another menu item without touching the spec code.
 - `Cypress.on("uncaught:exception")` is set to not fail tests on third-party script errors (ads, chat widgets, analytics) that are unrelated to what's under test.
+- The "Produk" and "Program" header menus open via pure CSS `:hover`. Cypress's synthetic `.trigger("mouseover")` does **not** change the browser's real hover state that CSS `:hover` relies on, so it won't visually open these dropdowns. This project uses [`cypress-real-events`](https://github.com/dmtrKovalenko/cypress-real-events)'s `.realHover()` instead (see `NavigationMenu.js` / `commands.js`), which performs a genuine OS-level mouse move.
 
 ## Extending this project
 

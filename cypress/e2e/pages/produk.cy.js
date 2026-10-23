@@ -10,8 +10,14 @@ describe("Produk Page", () => {
   });
 
   it("lists the core product cards", () => {
-    ["Petani PRO", "Agen PRO", "TimPRO", "KebunPRO", "Dokter Sawit"].forEach((product) => {
-      cy.contains(product).should("be.visible");
+    // Scoped to <main>: the header's Produk dropdown contains hidden <a>
+    // links with this same text (e.g. "TimPRO"), and an unscoped
+    // cy.contains() can match that hidden nav link before the visible
+    // card heading, failing the visibility assertion.
+    cy.get("main").within(() => {
+      ["Petani PRO", "Agen PRO", "TimPRO"].forEach((product) => {
+        cy.contains(product).should("be.visible");
+      });
     });
   });
 

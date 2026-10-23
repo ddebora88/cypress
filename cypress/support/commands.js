@@ -29,9 +29,13 @@ Cypress.Commands.add("clickNavLink", (label) => {
 /**
  * Hover/open a dropdown menu item (e.g. "Produk") and click a submenu
  * entry inside it by its visible text.
+ *
+ * Uses `.realHover()` (cypress-real-events) instead of
+ * `.trigger("mouseover")` because the site's dropdowns open via CSS
+ * `:hover`, which a synthetic mouseover event does not trigger.
  */
 Cypress.Commands.add("openSubMenu", (parentLabel, childLabel) => {
-  cy.getNavLink(parentLabel).scrollIntoView().trigger("mouseover", { force: true });
+  cy.getNavLink(parentLabel).scrollIntoView().realHover();
   cy.contains("a", childLabel, { timeout: 10000 })
     .should("be.visible")
     .click({ force: true });
