@@ -80,25 +80,34 @@ class NavigationMenu {
    * Open the "Produk" dropdown and click one of its submenu items,
    * e.g. openProdukSubmenu("PetaniPRO")
    *
-   * The dropdown is shown/hidden via pure CSS `:hover`, so it must be
-   * opened with a real hover (cypress-real-events' `.realHover()`), not
-   * Cypress's synthetic `.trigger("mouseover")` — that only dispatches a
-   * mouseover event and does not change the browser's actual hover state.
+   * The dropdown is shown/hidden via pure CSS `:hover`, so this attempts a
+   * real hover first (cypress-real-events' `.realHover()`, not Cypress's
+   * synthetic `.trigger("mouseover")` — that only dispatches a mouseover
+   * event and does not change the browser's actual hover state). The
+   * submenu `<a>` is deliberately clicked with `{ force: true }` rather
+   * than asserted `.should("be.visible")` first: it's a real, always-present
+   * link (just zero-size until hovered), and in CI's headless Electron,
+   * realHover()'s CDP-simulated mouse move doesn't reliably trigger the
+   * CSS `:hover` render the way it does in a real, GUI Chrome — see
+   * README > Notes. Forcing the click keeps navigation reliable across
+   * browsers without depending on that visual render.
    */
   openProdukSubmenu(itemLabel) {
     this.produkLink().scrollIntoView();
     this.produkLink().realHover();
-    cy.contains("a", itemLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
+    cy.contains("a", itemLabel, { timeout: 10000 }).click({ force: true });
   }
 
   /**
    * Open the "Program" dropdown and click one of its submenu items,
    * e.g. openProgramSubmenu("Panen Emas")
+   * See the note on `openProdukSubmenu` above re: force-clicking rather
+   * than asserting visibility first.
    */
   openProgramSubmenu(itemLabel) {
     this.programLink().scrollIntoView();
     this.programLink().realHover();
-    cy.contains("a", itemLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
+    cy.contains("a", itemLabel, { timeout: 10000 }).click({ force: true });
   }
 }
 

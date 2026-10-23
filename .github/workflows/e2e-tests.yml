@@ -47,6 +47,11 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           build: npm run allure:clean
+          # Chrome (pre-installed on ubuntu-latest runners), not the
+          # default Electron: cypress-real-events' realHover() — used to
+          # open this site's CSS-:hover dropdowns — needs the fuller CDP
+          # support Chrome has. See README > Notes.
+          browser: chrome
 
       - name: Generate Allure report
         if: always()

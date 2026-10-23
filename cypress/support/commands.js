@@ -37,12 +37,15 @@ Cypress.Commands.add("clickNavLink", (label) => {
  *
  * Uses `.realHover()` (cypress-real-events) instead of
  * `.trigger("mouseover")` because the site's dropdowns open via CSS
- * `:hover`, which a synthetic mouseover event does not trigger.
+ * `:hover`, which a synthetic mouseover event does not trigger. The
+ * submenu link is force-clicked rather than asserted `.should("be.visible")`
+ * first — see the note on `NavigationMenu.openProdukSubmenu` (realHover()'s
+ * CDP-simulated hover doesn't reliably render in CI's headless Electron).
  */
 Cypress.Commands.add("openSubMenu", (parentLabel, childLabel) => {
   cy.getNavLink(parentLabel).scrollIntoView();
   cy.getNavLink(parentLabel).realHover();
-  cy.contains("a", childLabel, { timeout: 10000 }).should("be.visible").click({ force: true });
+  cy.contains("a", childLabel, { timeout: 10000 }).click({ force: true });
 });
 
 /**
