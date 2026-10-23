@@ -1,0 +1,57 @@
+{
+  "mainMenu": [
+    {
+      "label": "Tentang",
+      "path": "/tentang",
+      "expectedTitle": "Tentang | SawitPRO"
+    },
+    {
+      "label": "Produk",
+      "path": "/produk",
+      "expectedTitle": "Produk | SawitPRO"
+    },
+    {
+      "label": "Program",
+      "path": "/program",
+      "expectedTitle": "Program | SawitPRO"
+    },
+    {
+      "label": "Karir",
+      "path": "/jobs",
+      "expectedTitle": "Karir | SawitPRO"
+    },
+    {
+      "label": "Promo",
+      "path": "/promo",
+      "expectedTitle": "Promo | SawitPRO"
+    },
+    {
+      "label": "Berita",
+      "path": "/berita-sawitpro",
+      "expectedTitle": "Berita | SawitPRO"
+    },
+    {
+      "label": "Harga Sawit",
+      "path": "/harga-tbs",
+      "expectedTitle": "Harga TBS | SawitPRO"
+    }
+  ],
+  "produkSubMenu": [
+    { "label": "PetaniPRO", "path": "/produk/petanipro" },
+    { "label": "AgenPRO", "path": "/produk/agenpro" },
+    { "label": "TimPRO", "path": "/produk/timpro" },
+    { "label": "KebunPRO", "path": "/produk/kebunpro" },
+    { "label": "MitraPRO", "path": "/produk/mitrapro" },
+    { "label": "DutaPRO", "path": "/produk/dutapro" },
+    { "label": "KUDPRO", "path": "/produk/kudpro" },
+    { "label": "Dokter Sawit", "path": "/produk/doktersawit" }
+  ],
+  "programSubMenu": [
+    { "label": "Panen Emas", "path": "/program/panen-emas" },
+    { "label": "PROTim", "path": "/program/protim" }
+  ],
+  "footerLinks": [
+    { "label": "Syarat dan Ketentuan", "path": "/term-and-condition" },
+    { "label": "Kebijakan Privasi", "path": "/privacy-policy" }
+  ]
+}

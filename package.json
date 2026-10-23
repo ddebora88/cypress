@@ -1,0 +1,24 @@
+{
+  "name": "sawitpro-web-automation",
+  "version": "1.0.0",
+  "description": "Sample Cypress web automation project for https://www.sawitpro.id/ - covers main menu navigation, homepage, and key product/info pages.",
+  "private": true,
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "cypress run",
+    "test:headed": "cypress run --headed",
+    "test:chrome": "cypress run --browser chrome",
+    "test:menu": "cypress run --spec cypress/e2e/navigation/main-menu.cy.js",
+    "test:homepage": "cypress run --spec cypress/e2e/homepage/homepage.cy.js"
+  },
+  "devDependencies": {
+    "cypress": "^13.15.0"
+  },
+  "keywords": [
+    "cypress",
+    "e2e",
+    "automation",
+    "sawitpro"
+  ]
+}
